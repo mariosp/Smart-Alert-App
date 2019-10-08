@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "407837954181",
+    "firebase_url": "https://unipismartalert-a742a.firebaseio.com",
+    "project_id": "unipismartalert-a742a",
+    "storage_bucket": "unipismartalert-a742a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407837954181:android:255e49ddcb5620a1f199ec",
+        "android_client_info": {
+          "package_name": "com.mariospatsis.unipismartalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407837954181-6d37pk3vhmv68k2175m3fjs61dmrfibr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mariospatsis.unipismartalert",
+            "certificate_hash": "11bc3acb0c2aae05cad6575ccd760c7e4ff69906"
+          }
+        },
+        {
+          "client_id": "407837954181-apfgpseefcapvjgek63sj0sdpqktka7a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA22o23nPHXY2PfPOPp-dnP9G3H75W1NtQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "407837954181-apfgpseefcapvjgek63sj0sdpqktka7a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

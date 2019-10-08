@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">UnipiSmartAlert</string>
+    <string name="main_title1">Monitoring Fall</string>
+    <string name="main_title2">Monitoring Earthquake activity</string>
+    <string name="btn_sos">SOS</string>
+    <string name="btn_abort">Abort</string>
+    <string name="typeFall">Emergency Fall</string>
+    <string name="typeSOS">Emergency Help</string>
+    <string name="typeAbort">Emergency Abort</string>
+    <string name="helpMsg">I am at the location with latitude %1$s and longitude %2$s and I need help.</string>
+</resources>
