@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     boolean countDownTimerIsRunning = false;
     boolean sosStatus = false;
     private FallDetectionHandler falldetection;
+    private SeismicDetectionHandler seismicdetection;
 
     private final static int REQUESTCODE = 325;
     LocationManager mLocationManager;
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sosTitle = findViewById(R.id.sos_text);
         sosBtn.setOnClickListener(this);
         abortBtn.setOnClickListener(this);
-        //checkPermision();
         checkPermissions();
         try {
             notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -78,21 +78,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mUsbService.setOnUsbServiceStatusListener(new OnUsbServiseStatusListener() {
             @Override
             public void onStatusChanged(boolean newStatus) {
-                if(!newStatus){
+                if(newStatus){
                     type = "earthquakeDetection";
                     if(falldetection!=null){
                         falldetection.unregisterListener();
                         cancelTimer();
                     }
                     mainTitle.setText(R.string.main_title2);
-                    setupFallDetection();
-                    //setupEarthquakeDetection();
+                    //setupFallDetection();
+                    setupEarthquakeDetection();
                 }else {
                     type = "fallDetection";
                     mainTitle.setText(R.string.main_title1);
                     setupFallDetection();
-                    //setupFallDetection();
-
                 }
             }
         });
@@ -135,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mainTitle.setText(R.string.main_title1);
                     falldetection.registerListener();
                 } else if(sosStatus){
-//                    sosStatus = false; // απενεργοποιουμε το Status του SOS για να μην πατηθει το κουμπι παλι για να ακυρωση το SOS
                     cancelSOSTimer();
                     handleEvent("AbortSOS");
                 }
@@ -206,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             r.stop();
                             mainTitle.setText(R.string.main_title1);
                             falldetection.registerListener();
+                            handleEvent("fallDetection");
                         }
 
                     }.start();
@@ -225,13 +223,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setupEarthquakeDetection() {
+        seismicdetection = new SeismicDetectionHandler(this);
+        seismicdetection.setSeismicDetectionListener(new SeismicDetectionListener() {
+            @Override
+            public void onStatusChanged(boolean seismicDetectionStatus) {
+                if(seismicDetectionStatus) {
+                    seismicdetection.unregisterListener(); // Κανουμε unregistrer τον listener μεχρι να γινει η καταγραφη στην βαση και να δουμε αν ειναι οντως σεισμος
+                    handleEvent("earthquakeDetection"); //καταγραφουμε στην βαση με type earthquakeDetection ωστε να κανουμε αναζητηση και σε αλλους χρηστες με το ιδιο type
+                }
+            }
+        });
     }
 
     private void handleEvent(String type){
         String eventType = type;
         double latd = LocationService.latitude;
         double lond = LocationService.latitude;
-        String city = LocationService.getCity();
+        //String city = LocationService.getCity();
         String lat = Double.toString(latd);
         String lon = Double.toString(lond);
         long timestamp = System.currentTimeMillis();
@@ -239,10 +247,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cal.setTimeInMillis(timestamp);
         String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
 
-        mFirebaseService.insertEvent(new EventModel(type, latd,lond,city,timestamp));
+        mFirebaseService.insertEvent(new EventModel(type, latd,lond,timestamp));
         if(type != "earthquakeDetection") { //Στελνουμε μηνυμα σε καθε περιπτωση εκτος απο την περιπτωση της ανιχνευσης σεισμου
             Notification notification = new Notification();
             notification.sendNotification(type, lat, lon, date);
+        }
+
+        if(type == "earthquakeDetection"){
+            System.out.println("ERTHDETECTION EVENT TO FIRE");
+            mFirebaseService.getEvents();
         }
     }
 }

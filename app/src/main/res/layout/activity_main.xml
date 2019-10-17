@@ -59,7 +59,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:textAlignment="center"
-        android:textColor="#00F31B1B"
+        android:textColor="#C41F14"
         app:layout_constraintBottom_toTopOf="@+id/btn_sos"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
