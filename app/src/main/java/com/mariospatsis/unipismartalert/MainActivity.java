@@ -3,6 +3,7 @@ package com.mariospatsis.unipismartalert;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -14,10 +15,12 @@ import android.net.Uri;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -140,6 +143,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_statistics:
+                //Intent goToStatistics = new Intent(this,Statistics.class);
+                //goToStatistics.putExtra("FCMToken", FCMToken);
+                //startActivity(goToStatistics);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
     private void checkPermissions() {
         List<String> PERMISSIONS = new ArrayList<>();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -242,13 +259,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //String city = LocationService.getCity();
         String lat = Double.toString(latd);
         String lon = Double.toString(lond);
-        long timestamp = System.currentTimeMillis();
+        final long timestamp = System.currentTimeMillis();
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(timestamp);
         String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
 
         mFirebaseService.insertEvent(new EventModel(type, latd,lond,timestamp));
-        if(type != "earthquakeDetection") { //Στελνουμε μηνυμα σε καθε περιπτωση εκτος απο την περιπτωση της ανιχνευσης σεισμου
+        if((type != "earthquakeDetection") && (type != "earthquake")) { //Στελνουμε μηνυμα σε καθε περιπτωση εκτος απο την περιπτωση της ανιχνευσης σεισμου
             Notification notification = new Notification();
             notification.sendNotification(type, lat, lon, date);
         }
@@ -256,6 +273,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(type == "earthquakeDetection"){
             System.out.println("ERTHDETECTION EVENT TO FIRE");
             mFirebaseService.getEvents();
+            mFirebaseService.setFirebaseListener(new FirebaseListener() {
+                @Override
+                public void onStatusChanged(boolean newStatus) { //Οταν παρουμε τα δεδομενα απο την firebase
+                    if(newStatus){
+                        List<EventModel> events = EventModel.filterEarthquakeDetectionEvents(mFirebaseService.eventsList);
+                        System.out.println("EDW");
+                        boolean seismicStatus = seismicdetection.seismicStatus(events, timestamp);
+                        if(seismicStatus){
+                            handleEvent("earthquake");
+                            new AlertDialog.Builder(MainActivity.mainActivity)
+                                    .setTitle("Earthquake")
+                                    .setMessage("An Earthquake has been detected")
+                                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            seismicdetection.registerListener();
+                                        }
+                                    })
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        }else {
+                            seismicdetection.registerListener();
+                        }
+                    }
+                }
+            });
         }
     }
 }

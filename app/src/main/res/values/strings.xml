@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">UnipiSmartAlert</string>
+    <string name="main_menu">Statistics</string>
     <string name="main_title1">Monitoring Fall</string>
     <string name="main_title2">Monitoring Earthquake activity</string>
     <string name="sos_title">SOS status is on</string>
@@ -10,4 +11,5 @@
     <string name="typeAbort">False Alarm. Everything is fine.</string>
     <string name="helpMsg">I am at the location with latitude %1$s and longitude %2$s and I need help. Time %3$s</string>
     <string name="abortMsg">Location with latitude %1$s and longitude %2$s. Time %3$s</string>
+    <string name="title_activity_statistics">Statistics</string>
 </resources>

@@ -8,6 +8,9 @@ import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 interface SeismicDetectionListener
 {
     public void onStatusChanged(boolean newStatus);
@@ -73,7 +76,31 @@ public class SeismicDetectionHandler implements SensorEventListener {
         }
     }
 
-    public void setSeismicDetectionListener(SeismicDetectionListener listener){
+    public void setSeismicDetectionListener(SeismicDetectionListener listener ){
         this.listener = listener;
     }
+
+    public boolean seismicStatus(List<EventModel> events, long eventTimestamp){
+        long cureventTs = TimeUnit.MILLISECONDS.toSeconds(eventTimestamp);
+        long eventTs;
+        long diff;
+        int times = 0;
+        for(EventModel event: events){
+            eventTs = TimeUnit.MILLISECONDS.toSeconds(event.timestamp);
+            diff = eventTs - cureventTs;
+            if(diff>= -3 && diff<= 3){
+                times++;
+            }
+        }
+
+        if(times> 1){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
+
 }

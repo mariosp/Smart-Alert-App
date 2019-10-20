@@ -16,11 +16,18 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 
+interface FirebaseListener
+{
+    public void onStatusChanged(boolean newStatus);
+}
 public class FirebaseService {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference usersRef = database.getReference().child("users");
     private String FCMToken;
     private String KEY_USERS = "users";
+
+    private FirebaseListener listener;
+    public List<EventModel> eventsList;
 
     public FirebaseService() {
     }
@@ -36,29 +43,22 @@ public class FirebaseService {
     }
 
     public void insertEvent(EventModel event){
+        System.out.println(FCMToken);
         usersRef.child(FCMToken).push().setValue(event);
     }
 
     public void getEvents(){
-        //final CountDownLatch done = new CountDownLatch(1);
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<EventModel> eventsList = deconstructData(dataSnapshot);
-                //done.countDown();
+                eventsList = deconstructData(dataSnapshot);
+                setFirebaseStatus(true);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-
-//        try {
-//            done.await(); //Περιμενου μεχρι να γυρισει η απαντηση απο firebase
-//        } catch(InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        //return message[0];
     }
 
     private List<EventModel> deconstructData(DataSnapshot dataSnapshot){
@@ -69,6 +69,17 @@ public class FirebaseService {
             }
         }
         return events;
+    }
+
+    public void setFirebaseStatus(boolean onCompleteStatus){
+        if(listener !=null){
+            listener.onStatusChanged(onCompleteStatus);
+
+        }
+    }
+
+    public void setFirebaseListener(FirebaseListener listener){
+        this.listener = listener;
     }
 
 }
