@@ -77,7 +77,8 @@ static double longitude;
 
         float distanceInMeters = loc1.distanceTo(loc2);
 
-        if(distanceInMeters <= 5000){
+        System.out.println(distanceInMeters);
+        if(distanceInMeters <= 5000){ // Αν η αποσταση ειναι μικροτερη απο 5χλ
             return true;
         }else {
             return false;

@@ -21,6 +21,7 @@ interface FirebaseListener
     public void onStatusChanged(boolean newStatus);
 }
 public class FirebaseService {
+   // private static final FirebaseService instance = new FirebaseService();
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference usersRef = database.getReference().child("users");
     private String FCMToken;
@@ -31,6 +32,10 @@ public class FirebaseService {
 
     public FirebaseService() {
     }
+
+//    //public static FirebaseService getInstance(){
+//        return instance;
+//    }
 
     public void getFCMToken(){
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.mainActivity,  new OnSuccessListener<InstanceIdResult>() {

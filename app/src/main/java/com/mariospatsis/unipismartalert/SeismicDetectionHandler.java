@@ -80,7 +80,7 @@ public class SeismicDetectionHandler implements SensorEventListener {
         this.listener = listener;
     }
 
-    public boolean seismicStatus(List<EventModel> events, long eventTimestamp){
+    public boolean seismicStatus(List<EventModel> events, long eventTimestamp, double latd,double lond){
         long cureventTs = TimeUnit.MILLISECONDS.toSeconds(eventTimestamp);
         long eventTs;
         long diff;
@@ -88,7 +88,7 @@ public class SeismicDetectionHandler implements SensorEventListener {
         for(EventModel event: events){
             eventTs = TimeUnit.MILLISECONDS.toSeconds(event.timestamp);
             diff = eventTs - cureventTs;
-            if(diff>= -3 && diff<= 3){
+            if(diff>= -3 && diff<= 3 && LocationService.getDistance(latd,lond, event.lat,event.lon)){
                 times++;
             }
         }

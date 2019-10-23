@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static Activity mainActivity;
     UsbService mUsbService = new UsbService();
     FirebaseService mFirebaseService = new FirebaseService();
+    //FirebaseService mFirebaseService = FirebaseService.getInstance();
     String type;
     Button sosBtn;
     Button abortBtn;
@@ -86,12 +89,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(falldetection!=null){
                         falldetection.unregisterListener();
                         cancelTimer();
+                        falldetection =null;
                     }
                     mainTitle.setText(R.string.main_title2);
                     //setupFallDetection();
                     setupEarthquakeDetection();
                 }else {
                     type = "fallDetection";
+                    if(seismicdetection!=null){
+                        seismicdetection.unregisterListener();
+                        seismicdetection = null;
+                    }
                     mainTitle.setText(R.string.main_title1);
                     setupFallDetection();
                 }
@@ -103,13 +111,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
+//        if(falldetection!=null){
+//            falldetection.unregisterListener();
+//            cancelTimer();
+//        }
+//        if(seismicdetection !=null){
+//            seismicdetection.unregisterListener();
+//        }
+//
+//        this.unregisterReceiver(mUsbService);
 
     }
 
     @Override
     public void onDestroy() { // Κανουμε unregister τον broadcaster οταν φευγουμε απο το activity
         super.onDestroy();
-        this.unregisterReceiver(mUsbService);
+//        this.unregisterReceiver(mUsbService);
+//        if(falldetection!=null){
+//            falldetection.unregisterListener();
+//            cancelTimer();
+//        }
+//        if(seismicdetection !=null){
+//            seismicdetection.unregisterListener();
+//        }
     }
 
     @Override
@@ -144,12 +168,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.topbar, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_statistics:
-                //Intent goToStatistics = new Intent(this,Statistics.class);
+                Intent goToStatistics = new Intent(this,Statistics.class);
                 //goToStatistics.putExtra("FCMToken", FCMToken);
-                //startActivity(goToStatistics);
+                startActivity(goToStatistics);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -191,12 +222,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (String permission : permissions) {
             if (ActivityCompat.checkSelfPermission(this, permission)
                     == PackageManager.PERMISSION_GRANTED) {
-                if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION))
+                if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
                     mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
                             locationService);
 
-            }
+                }
 
+            }
         }
     }
 
@@ -254,8 +286,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleEvent(String type){
         String eventType = type;
-        double latd = LocationService.latitude;
-        double lond = LocationService.latitude;
+        final double latd = LocationService.latitude;
+        final double lond = LocationService.latitude;
         //String city = LocationService.getCity();
         String lat = Double.toString(latd);
         String lon = Double.toString(lond);
@@ -279,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(newStatus){
                         List<EventModel> events = EventModel.filterEarthquakeDetectionEvents(mFirebaseService.eventsList);
                         System.out.println("EDW");
-                        boolean seismicStatus = seismicdetection.seismicStatus(events, timestamp);
+                        boolean seismicStatus = seismicdetection.seismicStatus(events, timestamp,latd,lond);
                         if(seismicStatus){
                             handleEvent("earthquake");
                             new AlertDialog.Builder(MainActivity.mainActivity)
