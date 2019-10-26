@@ -18,17 +18,19 @@ import java.util.concurrent.CountDownLatch;
 
 interface FirebaseListener
 {
-    public void onStatusChanged(boolean newStatus);
+    public void onStatusChanged(String newStatus);
 }
 public class FirebaseService {
    private static FirebaseService instance = null;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference usersRef = database.getReference().child("users");
+
     private String FCMToken;
     private String KEY_USERS = "users";
 
     private FirebaseListener listener;
     public List<EventModel> eventsList;
+    public List<EventModel> eventsUserList;
 
     private FirebaseService() {
     }
@@ -59,8 +61,8 @@ public class FirebaseService {
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                eventsList = deconstructData(dataSnapshot);
-                setFirebaseStatus(true);
+                eventsUserList = deconstructData(dataSnapshot);
+                setFirebaseStatus("allEvents");
             }
 
             @Override
@@ -68,6 +70,30 @@ public class FirebaseService {
             }
         });
     }
+
+    public void getUserEvents(){
+        usersRef.child(FCMToken).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                eventsUserList = deconstructUserData(dataSnapshot);
+                //System.out.println(eventsUserList);
+                setFirebaseStatus("userEvents");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private List<EventModel> deconstructUserData(DataSnapshot dataSnapshot) {
+        List<EventModel> events = new ArrayList<>();
+        for(DataSnapshot perEvent: dataSnapshot.getChildren() ){
+            events.add(perEvent.getValue(EventModel.class));
+        }
+        return events;
+    }
+
 
     private List<EventModel> deconstructData(DataSnapshot dataSnapshot){
         List<EventModel> events = new ArrayList<>();
@@ -79,10 +105,9 @@ public class FirebaseService {
         return events;
     }
 
-    public void setFirebaseStatus(boolean onCompleteStatus){
+    public void setFirebaseStatus(String onCompleteStatus){
         if(listener !=null){
             listener.onStatusChanged(onCompleteStatus);
-
         }
     }
 

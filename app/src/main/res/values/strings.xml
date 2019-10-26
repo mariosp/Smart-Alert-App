@@ -12,4 +12,18 @@
     <string name="helpMsg">I am at the location with latitude %1$s and longitude %2$s and I need help. Time %3$s</string>
     <string name="abortMsg">Location with latitude %1$s and longitude %2$s. Time %3$s</string>
     <string name="title_activity_statistics">Statistics</string>
+    <string name="statistics_count">Events : %1$s</string>
+    <string name="i_time">Date: %1$s</string>
+    <string name="i_lat">latitude: %1$s</string>
+    <string name="i_lon">longitude: %1$s</string>
+
+    <string-array name="statistics_events">
+        <item>Select event</item>
+        <item>Fall Detection</item>
+        <item>Earthquake Detection</item>
+        <item>Earthquake</item>
+        <item>SOS</item>
+        <item>Abort SOS</item>
+    </string-array>
+
 </resources>

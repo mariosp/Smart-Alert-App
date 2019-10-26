@@ -327,8 +327,8 @@ FirebaseService mFirebaseService;
             mFirebaseService.getEvents();
             mFirebaseService.setFirebaseListener(new FirebaseListener() {
                 @Override
-                public void onStatusChanged(boolean newStatus) { //Οταν παρουμε τα δεδομενα απο την firebase
-                    if(newStatus){
+                public void onStatusChanged(String newStatus) { //Οταν παρουμε τα δεδομενα απο την firebase
+                    if(newStatus.equals("allEvents")){
                         List<EventModel> events = EventModel.filterEarthquakeDetectionEvents(mFirebaseService.eventsList);
                         System.out.println("EDW");
                         boolean seismicStatus = seismicdetection.seismicStatus(events, timestamp,latd,lond);
