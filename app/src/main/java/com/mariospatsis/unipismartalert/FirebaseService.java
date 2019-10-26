@@ -21,7 +21,7 @@ interface FirebaseListener
     public void onStatusChanged(boolean newStatus);
 }
 public class FirebaseService {
-   // private static final FirebaseService instance = new FirebaseService();
+   private static FirebaseService instance = null;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference usersRef = database.getReference().child("users");
     private String FCMToken;
@@ -30,12 +30,15 @@ public class FirebaseService {
     private FirebaseListener listener;
     public List<EventModel> eventsList;
 
-    public FirebaseService() {
+    private FirebaseService() {
     }
 
-//    //public static FirebaseService getInstance(){
-//        return instance;
-//    }
+    public static FirebaseService getInstance(){
+        if(instance == null){
+            instance = new FirebaseService();
+        }
+        return instance;
+    }
 
     public void getFCMToken(){
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.mainActivity,  new OnSuccessListener<InstanceIdResult>() {

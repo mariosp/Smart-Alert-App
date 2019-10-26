@@ -36,8 +36,8 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static Activity mainActivity;
     UsbService mUsbService = new UsbService();
-    FirebaseService mFirebaseService = new FirebaseService();
-    //FirebaseService mFirebaseService = FirebaseService.getInstance();
+    //FirebaseService mFirebaseService = new FirebaseService();
+FirebaseService mFirebaseService;
     String type;
     Button sosBtn;
     Button abortBtn;
@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Notification.setContacts(this);
         mainActivity = this;
+        mFirebaseService = FirebaseService.getInstance();
         mFirebaseService.getFCMToken();
         mLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationService = new LocationService();
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .setMessage("An Earthquake has been detected")
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            if( !FallDetectionHandler.getListenerStatus()){
+                                            if( FallDetectionHandler.getListenerStatus() == null || FallDetectionHandler.getListenerStatus() ==false ){
                                                 seismicdetection.registerListener();
                                             }
                                         }
@@ -346,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                         }else {
-                            if(!FallDetectionHandler.getListenerStatus() ){
+                            if(FallDetectionHandler.getListenerStatus() == null || FallDetectionHandler.getListenerStatus() ==false ){
                                 seismicdetection.registerListener();
                             }
 

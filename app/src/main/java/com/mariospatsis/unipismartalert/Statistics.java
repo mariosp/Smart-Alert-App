@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 public class Statistics extends AppCompatActivity {
-    FirebaseService mFirebaseService = new FirebaseService();
+    FirebaseService mFirebaseService = FirebaseService.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
