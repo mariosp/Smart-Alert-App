@@ -5,4 +5,23 @@
     <string name="main_title2">Παρακολούθηση σεισμικής δραστηριότητας</string>
     <string name="btn_sos">SOS</string>
     <string name="btn_abort">Ακυρωση</string>
+    <string name="typeFall">Βοηθεια πτωσης</string>
+    <string name="typeSOS">Εκτατη Αναγκη</string>
+    <string name="typeAbort">Λαθος Συναργεμος. Ολα ειναι καλα.</string>
+    <string name="helpMsg">Ειμαι στην τοποθεσια με γεωγρ μηκος %1$s και γεωγρ πλατος %2$s και χρειαζομαι βοηθεια. Ημερομ. %3$s</string>
+    <string name="abortMsg">τοποθεσια με γεωγρ μηκος %1$s και γεωγρ πλατος %2$s. Ημερομ. %3$s</string>
+    <string name="title_activity_statistics">Στατιστικα</string>
+    <string name="statistics_count">Συνολικο αριθμος γεγονότων : %1$s</string>
+    <string name="i_time">Ημερομ. : %1$s</string>
+    <string name="i_lat">Γεωγρ μηκος: %1$s</string>
+    <string name="i_lon">Γεωγρ πλατος: %1$s</string>
+
+    <string-array name="statistics_events">
+        <item>Επιλεξτε συμβαν</item>
+        <item>Πτωση</item>
+        <item>Σεισμικη δραστηριοτητα</item>
+        <item>Σεισμος</item>
+        <item>Εκτατη Αναγκη</item>
+        <item>Ακυρωση Συναργεμου Εκτατης Αναγκης</item>
+    </string-array>
 </resources>
