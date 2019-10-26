@@ -27,6 +27,7 @@ public class FallDetectionHandler implements SensorEventListener {
     private boolean moIsMax = false;
     private Context mContext;
     private int i;
+    public static Boolean status;
 
     public FallDetectionHandler(Context context) {
         mContext = context;
@@ -36,11 +37,17 @@ public class FallDetectionHandler implements SensorEventListener {
     }
 
     public void registerListener(){
+        status = true;
         mSensorManager.registerListener(this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void unregisterListener(){
+        status = false;
         mSensorManager.unregisterListener(this);
+    }
+
+    public static Boolean getListenerStatus(){
+        return status;
     }
 
 
@@ -57,7 +64,7 @@ public class FallDetectionHandler implements SensorEventListener {
                     + Math.pow(loZ, 2));
             //mlPreviousTime = System.currentTimeMillis();
             //Log.i(TAG, "loX : " + loX + " loY : " + loY + " loZ : " + loZ);
-            System.out.println(loAccelerationReader);
+            //System.out.println(loAccelerationReader);
             if (loAccelerationReader <= 6.0) {
                 moIsMin = true;
 //                Log.i(TAG, "min");

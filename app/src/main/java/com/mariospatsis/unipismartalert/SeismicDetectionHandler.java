@@ -25,6 +25,7 @@ public class SeismicDetectionHandler implements SensorEventListener {
     private boolean moIsMax = false;
     private Context mContext;
     private int i;
+    public static Boolean status;
 
     public SeismicDetectionHandler(Context context) {
         mContext = context;
@@ -34,11 +35,17 @@ public class SeismicDetectionHandler implements SensorEventListener {
     }
 
     public void registerListener(){
+        status = true;
         mSensorManager.registerListener(this,mSensor,SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     public void unregisterListener(){
+        status = false;
         mSensorManager.unregisterListener(this);
+    }
+
+    public static Boolean getListenerStatus(){
+        return status;
     }
 
 
@@ -53,7 +60,7 @@ public class SeismicDetectionHandler implements SensorEventListener {
             double loAccelerationReader = Math.sqrt(Math.pow(loX, 2)
                     + Math.pow(loY, 2)
                     + Math.pow(loZ, 2));
-            System.out.println(loAccelerationReader);
+            //System.out.println(loAccelerationReader);
             if (loAccelerationReader >= 11) {
                 Toast.makeText(mContext, "EARTHQUAKE DETECTED!!!!!", Toast.LENGTH_LONG).show();
                 setSeismicDetection(true);

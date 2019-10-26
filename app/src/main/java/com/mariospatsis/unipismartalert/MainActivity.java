@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Uri notification;
     Ringtone r;
     private LocationListener locationService;
+    private Boolean prevStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,23 +86,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onStatusChanged(boolean newStatus) {
                 if(newStatus){
-                    type = "earthquakeDetection";
-                    if(falldetection!=null){
-                        falldetection.unregisterListener();
-                        cancelTimer();
-                        falldetection =null;
+                    if(prevStatus == null || prevStatus != newStatus ) {
+                        prevStatus = newStatus;
+                        type = "earthquakeDetection";
+                        //if(falldetection!=null){
+                        System.out.println(falldetection);
+                        if (falldetection != null && FallDetectionHandler.getListenerStatus()) {
+                            //System.out.println(falldetection.getListenerStatus());
+                            falldetection.unregisterListener();
+                            //falldetection =null;
+                        }
+
+                        //cancelTimer();
+                        //falldetection =null;
+                        // }
+                        mainTitle.setText(R.string.main_title2);
+                        //setupFallDetection();
+                        setupEarthquakeDetection();
                     }
-                    mainTitle.setText(R.string.main_title2);
-                    //setupFallDetection();
-                    setupEarthquakeDetection();
                 }else {
-                    type = "fallDetection";
-                    if(seismicdetection!=null){
-                        seismicdetection.unregisterListener();
-                        seismicdetection = null;
+                    if(prevStatus == null || prevStatus != newStatus ) {
+                        prevStatus = newStatus;
+                        type = "fallDetection";
+                        //if(seismicdetection!=null){
+                        System.out.println(seismicdetection);
+                        // System.out.println(seismicdetection.getListenerStatus());
+                        if (seismicdetection != null && SeismicDetectionHandler.getListenerStatus()) {
+                            System.out.println(seismicdetection);
+                            seismicdetection.unregisterListener();
+                            // seismicdetection = null;
+                        }
+                        //seismicdetection = null;
+                        //}
+                        mainTitle.setText(R.string.main_title1);
+                        setupFallDetection();
                     }
-                    mainTitle.setText(R.string.main_title1);
-                    setupFallDetection();
                 }
             }
         });
@@ -284,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void handleEvent(String type){
+    private void handleEvent( String type){
         String eventType = type;
         final double latd = LocationService.latitude;
         final double lond = LocationService.latitude;
@@ -296,13 +315,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cal.setTimeInMillis(timestamp);
         String date = DateFormat.format("dd-MM-yyyy HH:mm", cal).toString();
 
-        mFirebaseService.insertEvent(new EventModel(type, latd,lond,timestamp));
-        if((type != "earthquakeDetection") && (type != "earthquake")) { //Στελνουμε μηνυμα σε καθε περιπτωση εκτος απο την περιπτωση της ανιχνευσης σεισμου
+        mFirebaseService.insertEvent(new EventModel(eventType, latd,lond,timestamp));
+        if((eventType != "earthquakeDetection") && (eventType != "earthquake")) { //Στελνουμε μηνυμα σε καθε περιπτωση εκτος απο την περιπτωση της ανιχνευσης σεισμου
             Notification notification = new Notification();
             notification.sendNotification(type, lat, lon, date);
         }
 
-        if(type == "earthquakeDetection"){
+        if(eventType == "earthquakeDetection"){
             System.out.println("ERTHDETECTION EVENT TO FIRE");
             mFirebaseService.getEvents();
             mFirebaseService.setFirebaseListener(new FirebaseListener() {
@@ -319,13 +338,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     .setMessage("An Earthquake has been detected")
                                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
-                                            seismicdetection.registerListener();
+                                            if( !FallDetectionHandler.getListenerStatus()){
+                                                seismicdetection.registerListener();
+                                            }
                                         }
                                     })
                                     .setIcon(android.R.drawable.ic_dialog_alert)
                                     .show();
                         }else {
-                            seismicdetection.registerListener();
+                            if(!FallDetectionHandler.getListenerStatus() ){
+                                seismicdetection.registerListener();
+                            }
+
                         }
                     }
                 }
