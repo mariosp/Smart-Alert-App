@@ -36,8 +36,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     static Activity mainActivity;
     UsbService mUsbService = new UsbService();
-    //FirebaseService mFirebaseService = new FirebaseService();
-FirebaseService mFirebaseService;
+    FirebaseService mFirebaseService;
     String type;
     Button sosBtn;
     Button abortBtn;
