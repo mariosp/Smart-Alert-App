@@ -1,2 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">UnipiSmartAlert</string>
+    <string name="main_menu">Statistiques</string>
+    <string name="main_title1">Surveillance d automne</string>
+    <string name="main_title2">Surveillance de l activité sismique</string>
+    <string name="sos_title">Le statut SOS est activé</string>
+    <string name="btn_sos">SOS</string>
+    <string name="btn_abort">Avorter</string>
+    <string name="typeFall">Chute d urgence</string>
+    <string name="typeSOS">Aide d urgence</string>
+    <string name="typeAbort">Fausse alarme. Tout va bien.</string>
+    <string name="helpMsg">Je suis à la location avec latitude %1$s et longitude %2$ set j ai besoin d aide. Temps %3$s</string>
+    <string name="abortMsg">Lieu avec latitude %1$s et longitude %2$s. Temps %3$s</string>
+    <string name="title_activity_statistics">Statistiques</string>
+    <string name="statistics_count">Événements : %1$s</string>
+    <string name="i_time">Date: %1$s</string>
+    <string name="i_lat">latitude: %1$s</string>
+    <string name="i_lon">longitude: %1$s</string>
+
+    <string-array name="statistics_events">
+        <item>Sélectionnez un événement</item>
+        <item>Détection de chute</item>
+        <item>Détection de tremblement de terre</item>
+        <item>Tremblement de terre</item>
+        <item>SOS</item>
+        <item>Avorter SOS</item>
+    </string-array>
+</resources>
