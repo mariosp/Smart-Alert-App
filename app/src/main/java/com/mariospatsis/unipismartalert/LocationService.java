@@ -17,9 +17,13 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+/*
+*  H Κλαση LocationService επιστρεφει τις συντεταγμενες της συσκευης του χρηστη με την χρηση του gps
+*  */
 public class LocationService implements LocationListener {
 static double latitude;
 static double longitude;
+
 
     @Override
     public void onLocationChanged(Location location) {
@@ -48,24 +52,30 @@ static double longitude;
 
     }
 
-    static String getCity (){
-        String cityName = null;
-        Geocoder gcd = new Geocoder(MainActivity.mainActivity, Locale.getDefault());
-        List<Address> addresses;
-        try {
-            addresses = gcd.getFromLocation(latitude,
-                    longitude, 1);
-            if (addresses.size() > 0) {
-                cityName = addresses.get(0).getLocality();
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+//    static String getCity (){
+//        String cityName = null;
+//        Geocoder gcd = new Geocoder(MainActivity.mainActivity, Locale.getDefault());
+//        List<Address> addresses;
+//        try {
+//            addresses = gcd.getFromLocation(latitude,
+//                    longitude, 1);
+//            if (addresses.size() > 0) {
+//                cityName = addresses.get(0).getLocality();
+//            }
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return cityName;
+//    }
 
-        return cityName;
-    }
 
+    /*
+    * getDistance
+    *  Υπολογιζει με βαση τις συντεταγμενες εισοδου αμα η αποσταση σε μετρα ειναι
+    *   μικροτερη η ιση με 5000 μετρα (5χμλ)
+    *  */
     public static boolean getDistance(Double lat1, Double lon1, Double lat2, Double lon2){
         Location loc1 = new Location("");
         loc1.setLatitude(lat1);

@@ -15,7 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-
+/*
+ * Interface  FirebaseListener
+ * με μεθοδο onStatusChanged
+ * Γινεται override η μεθοδος στην main Activity και χρησιμοποιειται σαν listener οπου επιστρεψει
+ * στην μεθοδο ενα status οταν εχει ολοκληρωθει η επικοινωνια με την firebase και εχουν επιστραφει τα αποτελεσματα που
+ * ζητησε ο χρηστης.
+ * */
 interface FirebaseListener
 {
     public void onStatusChanged(String newStatus);
@@ -32,9 +38,12 @@ public class FirebaseService {
     public List<EventModel> eventsList;
     public List<EventModel> eventsUserList;
 
-    private FirebaseService() {
+    private FirebaseService() { //singleton class
     }
 
+    /* getInstance
+    *  Στατικη μεθοδος που επιστρεφει το instance της κλασης
+    *  */
     public static FirebaseService getInstance(){
         if(instance == null){
             instance = new FirebaseService();
@@ -42,6 +51,11 @@ public class FirebaseService {
         return instance;
     }
 
+
+    /* getFCMToken
+     * Επιστρεφεται απο την Firebase Messaging το FCM token της συσκευης.
+     * Το Token ειναι ιδιο μεχρι να διαγραφτει η εφαρμογη και χρησιμοποιειται ως unique ID του χρηστη στην βαση
+     * */
     public void getFCMToken(){
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.mainActivity,  new OnSuccessListener<InstanceIdResult>() {
             @Override
@@ -52,16 +66,21 @@ public class FirebaseService {
         });
     }
 
+    /* insertEvent
+    * Δεχεται ενα αντικειμενο EventModel
+    * και γραφει στην βαση της firebase αυτο το event */
     public void insertEvent(EventModel event){
-        System.out.println(FCMToken);
         usersRef.child(FCMToken).push().setValue(event);
     }
 
+    /* getEvents
+        Επιστρεφει ολα τα events ολων των χρηστων απο την βαση της Firebase
+    *  */
     public void getEvents(){
         usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                eventsUserList = deconstructData(dataSnapshot);
+                eventsList = deconstructData(dataSnapshot);
                 setFirebaseStatus("allEvents");
             }
 
@@ -71,12 +90,14 @@ public class FirebaseService {
         });
     }
 
+    /* getUserEvents
+        Επιστρεφει ολα τα events του χρηστη απο την βαση της Firebase
+    *  */
     public void getUserEvents(){
         usersRef.child(FCMToken).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 eventsUserList = deconstructUserData(dataSnapshot);
-                //System.out.println(eventsUserList);
                 setFirebaseStatus("userEvents");
             }
 
@@ -86,6 +107,7 @@ public class FirebaseService {
         });
     }
 
+
     private List<EventModel> deconstructUserData(DataSnapshot dataSnapshot) {
         List<EventModel> events = new ArrayList<>();
         for(DataSnapshot perEvent: dataSnapshot.getChildren() ){
@@ -93,7 +115,6 @@ public class FirebaseService {
         }
         return events;
     }
-
 
     private List<EventModel> deconstructData(DataSnapshot dataSnapshot){
         List<EventModel> events = new ArrayList<>();
@@ -105,12 +126,20 @@ public class FirebaseService {
         return events;
     }
 
+    /* setFirebaseStatus
+     * καλει την μεθοδο onStatusChanged που εχει υλοποιηθει στην MainActivity
+     * οταν ολοκληρωθει η επικοινωνια με την firebase και εχουν επιστραφει τα events
+     */
     public void setFirebaseStatus(String onCompleteStatus){
         if(listener !=null){
             listener.onStatusChanged(onCompleteStatus);
         }
     }
 
+    /* setFirebaseListener
+     * Αποθηκευση του FallDetectionListener instance  (MainActivity) στα properties του αντικειμενου
+     * για να γινει χρηστη του απο την setFirebaseStatus
+     */
     public void setFirebaseListener(FirebaseListener listener){
         this.listener = listener;
     }

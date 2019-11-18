@@ -11,11 +11,22 @@ import android.widget.Toast;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * Interface  SeismicDetectionListener
+ * με μεθοδο onStatusChanged
+ * Γινεται override η μεθοδος στην main Activity και χρησιμοποιειται σαν listener οταν υπαρχει εντοπισμος δονησης
+ * */
 interface SeismicDetectionListener
 {
     public void onStatusChanged(boolean newStatus);
 }
 
+/*
+ *  H Κλαση SeismicDetectionHandler διαχειριζεται τις καταστασεις του επιταχυνσιομετρου
+ *  και επιστρεφει στην MainActivity status = true μεσω της μεθοδου onStatusChanged οταν
+ *  υπαρχει εντοπισμος δονησης του κινητου (seismicDetection)
+ *
+ *   */
 public class SeismicDetectionHandler implements SensorEventListener {
     private String TAG = "SEISMIC DETECTION HANDLER";
     private SeismicDetectionListener listener;
@@ -30,9 +41,11 @@ public class SeismicDetectionHandler implements SensorEventListener {
     public SeismicDetectionHandler(Context context) {
         mContext = context;
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER); // o sensor που θα χρησιμοποιηθει (TYPE_ACCELEROMETER)
         registerListener();
     }
+
+    /* Εγγραφη του listener SensorEventListener (this) που κανει implement η κλαση  */
 
     public void registerListener(){
         status = true;
@@ -49,6 +62,9 @@ public class SeismicDetectionHandler implements SensorEventListener {
     }
 
 
+    /*
+     * Για καθε event απο το επιταχυνσιομετρο
+     * */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
 
@@ -76,6 +92,9 @@ public class SeismicDetectionHandler implements SensorEventListener {
 
     }
 
+    /* setSeismicDetection
+     * καλει την μεθοδο onStatusChanged που εχει υλοποιηθει στην MainActivity
+     */
     public void setSeismicDetection(boolean seismicDetectionstatus){
         if(listener !=null){
             listener.onStatusChanged(seismicDetectionstatus);
@@ -83,10 +102,18 @@ public class SeismicDetectionHandler implements SensorEventListener {
         }
     }
 
+    /* setSeismicDetectionListener
+     * Αποθηκευση του SeismicDetectionListener instance  (MainActivity) στα properties του αντικειμενου
+     * για να γινει χρηστη του απο την setSeismicDetection
+     */
     public void setSeismicDetectionListener(SeismicDetectionListener listener ){
         this.listener = listener;
     }
 
+    /* seismicStatus
+    * Ελεγχει αμα τα events ειναι σε κοντινη χρονικη περιοδο ( 6 δευτερολεπτα ) και
+    * αμα η αποσταση ειναι κοντινη (5χμλ)
+    * Επιστρεφει true / false */
     public boolean seismicStatus(List<EventModel> events, long eventTimestamp, double latd,double lond){
         long cureventTs = TimeUnit.MILLISECONDS.toSeconds(eventTimestamp);
         long eventTs;

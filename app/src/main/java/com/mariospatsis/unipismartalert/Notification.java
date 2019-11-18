@@ -19,6 +19,9 @@ import java.util.Locale;
 import java.util.Set;
 import android.os.Handler;
 
+/* Notification κλαση
+    Ειδοποιει αλλους χρηστες με την αποστολη sms
+*  */
 public class Notification {
     static Activity mainActivity;
     String[] contacts;
@@ -30,6 +33,9 @@ public class Notification {
         smsManager = SmsManager.getDefault();
     }
 
+    /* getMessage
+     *   Αποστολη SMS
+     *  */
     public void sendNotification(String notificationType,String lat,String lon, String time){
         String msg = getMessage(notificationType,lat,lon,time);
 
@@ -40,6 +46,9 @@ public class Notification {
         Toast.makeText(mainActivity, msg, Toast.LENGTH_LONG).show();
     }
 
+    /* getMessage
+    *   Επιστροφη καταλληλου μηνυματος με βασει τον τυπο του event
+    *  */
     private String getMessage(String notificationType,String lat,String lon, String time){
         String type ="";
         if(notificationType == "SOS"){
@@ -56,6 +65,9 @@ public class Notification {
     }
 
 
+    /* getContacts
+        Επιστροφη των αποθηκευμενων επαφων απο την sharedPreference
+    * */
     private void getContacts(){
         SharedPreferences sharedPref = mainActivity.getPreferences(Context.MODE_PRIVATE);
         Set<String> contacts = sharedPref.getStringSet("ContactNumbers",null);
@@ -63,6 +75,10 @@ public class Notification {
 
     }
 
+    /*
+    * setContacts
+    * Αποθηκευση αριθμων στην sharedPreference
+    * */
     static void setContacts(Activity activity){
         mainActivity = activity;
         Set<String> contacts = new HashSet<String>();
@@ -76,6 +92,9 @@ public class Notification {
         editor.apply();
     }
 
+    /* textToSpeech
+    * Εκφωνιση περιεχομενου μηνυματος
+    *  */
     private void textToSpeech(){
         final Handler handler = new Handler();
         tts = new TextToSpeech(mainActivity.getApplicationContext(),new TextToSpeech.OnInitListener() {

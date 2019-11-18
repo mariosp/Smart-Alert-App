@@ -12,6 +12,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+
+/*
+    Το καθε item της λιστας στο Statistics Activity
+*  */
 public class ItemAdapter extends BaseAdapter {
     List<EventModel> events;
     Context context;

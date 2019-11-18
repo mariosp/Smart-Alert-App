@@ -13,11 +13,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class Statistics extends AppCompatActivity implements AdapterView.OnItemSelectedListener  {
-    FirebaseService mFirebaseService = FirebaseService.getInstance();
+    FirebaseService mFirebaseService = FirebaseService.getInstance(); //instance του firebaseService
     Spinner spinner;
     TextView count;
     ListView listView;
     List<EventModel> events;
+
+    /*
+    * -Αρχικοποιηση αντικειμενων UI οθονης Στατιστικων (Statistics Activity)
+    * - Επιστρεφονται τα events του χρηστη της συσκευης
+    *  */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +34,9 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
 
         mFirebaseService.getUserEvents();
 
-
         mFirebaseService.setFirebaseListener(new FirebaseListener() {
             @Override
-            public void onStatusChanged(String newStatus) {
+            public void onStatusChanged(String newStatus) { // οταν ολοκληρωθει η επικοινωνια με την firebase Database
                 if(newStatus == "userEvents"){
                     events = mFirebaseService.eventsUserList;
                 }
@@ -41,9 +45,11 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
     }
 
 
+    /* onItemSelected
+       οταν επιλεγεται μια επιλογη του αντικειμενου Spinner
+    *  */
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-        System.out.println(position);
         List<EventModel> events = new ArrayList<>();
         switch (position){
             case 0: //NO FILTER
@@ -52,11 +58,11 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
                 events = filterEvents("fallDetection");
                 System.out.println(events);
                 break;
-            case 2:
+            case 2: //Seismic Detection
                 events = filterEvents("earthquakeDetection");
                 System.out.println(events);
                 break;
-            case 3:
+            case 3: //earthquake
                 events = filterEvents("earthquake");
                 System.out.println(events);
                 break;
@@ -81,6 +87,9 @@ public class Statistics extends AppCompatActivity implements AdapterView.OnItemS
 
     }
 
+    /* filterEvents
+        Φιλτραρει τα events με βασει την επιλογη που εχει κανει ο χρηστης στο spinner
+    *   */
    private List<EventModel> filterEvents(String eventType){
        List<EventModel> filteredEvents = new ArrayList<>();
 
