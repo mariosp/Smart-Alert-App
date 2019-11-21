@@ -77,28 +77,16 @@ public class FallDetectionHandler implements SensorEventListener {
             double loAccelerationReader = Math.sqrt(Math.pow(loX, 2)
                     + Math.pow(loY, 2)
                     + Math.pow(loZ, 2));
-            //mlPreviousTime = System.currentTimeMillis();
-            //Log.i(TAG, "loX : " + loX + " loY : " + loY + " loZ : " + loZ);
-            //System.out.println(loAccelerationReader);
             if (loAccelerationReader <= 6.0) {
                 moIsMin = true;
-//                Log.i(TAG, "min");
+
             }
 
             if (moIsMin) {
                 i++;
-                //Log.i(TAG, " loAcceleration : " + loAccelerationReader);
                 if (loAccelerationReader >= 25) {
-//                    long llCurrentTime = System.currentTimeMillis();
-//                    System.out.println(llCurrentTime);
-//                    long llTimeDiff = llCurrentTime - mlPreviousTime;
-//                    System.out.println(mlPreviousTime);
-//                    System.out.println(llTimeDiff);
-//                    Log.i(TAG, "loTime :" + llTimeDiff);
-//                    if (llTimeDiff >= 10) {
                         moIsMax = true;
                         Log.i(TAG, "max");
-//                    }
                 }
 
             }

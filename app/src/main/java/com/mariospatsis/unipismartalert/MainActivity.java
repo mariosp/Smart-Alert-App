@@ -327,7 +327,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /* handleEvent
-    * Διαχειριση των events για εγγραφη στην βαση και αποστολη sms  */
+    * Διαχειριση των events για εγγραφη στην βαση και αποστολη sms
+    * Αναλογα το ειδος του event γινεται η καταλληλη ενεργεια */
     private void handleEvent( String type){
         String eventType = type;
         final double latd = LocationService.latitude;

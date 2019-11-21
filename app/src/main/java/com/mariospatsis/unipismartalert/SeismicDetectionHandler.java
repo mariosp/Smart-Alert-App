@@ -76,7 +76,6 @@ public class SeismicDetectionHandler implements SensorEventListener {
             double loAccelerationReader = Math.sqrt(Math.pow(loX, 2)
                     + Math.pow(loY, 2)
                     + Math.pow(loZ, 2));
-            //System.out.println(loAccelerationReader);
             if (loAccelerationReader >= 11) {
                 Toast.makeText(mContext, "EARTHQUAKE DETECTED!!!!!", Toast.LENGTH_LONG).show();
                 setSeismicDetection(true);

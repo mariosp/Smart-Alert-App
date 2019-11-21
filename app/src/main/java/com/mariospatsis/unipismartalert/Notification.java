@@ -84,7 +84,7 @@ public class Notification {
         Set<String> contacts = new HashSet<String>();
 
         contacts.add("6980477426");
-        contacts.add("6980477427");
+        contacts.add("6947671008");
 
         SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -104,7 +104,6 @@ public class Notification {
                 if(status != TextToSpeech.ERROR) {
                     tts.setLanguage(Locale.US);
                     for(int i=1; i<=3; i++){
-//                        tts.speak("HELP ME", TextToSpeech.QUEUE_ADD, null);
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
