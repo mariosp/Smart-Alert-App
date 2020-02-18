@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">UnipiSmartAlert</string>
+    <string name="main_menu">Στατιστικα</string>
+    <string name="main_menu_contacts">Επαφες</string>
     <string name="main_title1">Παρακολούθηση πτώσης</string>
     <string name="main_title2">Παρακολούθηση σεισμικής δραστηριότητας</string>
     <string name="btn_sos">SOS</string>

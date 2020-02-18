@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Notification.setContacts(this); // Εγγραφη των επαφων στην μνημη sharedPreference
         mainActivity = this;
         mFirebaseService = FirebaseService.getInstance();
         mFirebaseService.getFCMToken(); // Γινεται generate FCM token απο την Firebase Messaging
@@ -133,29 +132,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-//        if(falldetection!=null){
-//            falldetection.unregisterListener();
-//            cancelTimer();
-//        }
-//        if(seismicdetection !=null){
-//            seismicdetection.unregisterListener();
-//        }
-//
-//        this.unregisterReceiver(mUsbService);
-
     }
 
     @Override
     public void onDestroy() { // Κανουμε unregister τον broadcaster οταν φευγουμε απο το activity
         super.onDestroy();
-//        this.unregisterReceiver(mUsbService);
-//        if(falldetection!=null){
-//            falldetection.unregisterListener();
-//            cancelTimer();
-//        }
-//        if(seismicdetection !=null){
-//            seismicdetection.unregisterListener();
-//        }
     }
 
     /*
@@ -209,6 +190,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.menu_statistics:
                 Intent goToStatistics = new Intent(this,Statistics.class);
                 startActivity(goToStatistics);  // Νεο acitvity Statistics
+                return true;
+            case R.id.menu_contacts:
+                Intent goToContacts = new Intent(this,ContactsActivity.class);
+                startActivity(goToContacts);  // Νεο acitvity Contacts
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -342,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mFirebaseService.insertEvent(new EventModel(eventType, latd,lond,timestamp)); // Εγγραφη στην Firebase Database
         if((eventType != "earthquakeDetection") && (eventType != "earthquake")) { //Στελνουμε μηνυμα σε καθε περιπτωση εκτος απο την περιπτωση της ανιχνευσης σεισμου
-            Notification notification = new Notification();
+            Notification notification = new Notification(mainActivity);
             notification.sendNotification(type, lat, lon, date); // αποστολη SMS
         }
 

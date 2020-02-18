@@ -28,7 +28,8 @@ public class Notification {
     SmsManager smsManager;
     TextToSpeech tts;
 
-    public Notification() {
+    public Notification(Activity activity) {
+        mainActivity = activity;
         getContacts();
         smsManager = SmsManager.getDefault();
     }
@@ -79,18 +80,18 @@ public class Notification {
     * setContacts
     * Αποθηκευση αριθμων στην sharedPreference
     * */
-    static void setContacts(Activity activity){
-        mainActivity = activity;
-        Set<String> contacts = new HashSet<String>();
-
-        contacts.add("6980477426");
-        contacts.add("6947671008");
-
-        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putStringSet("ContactNumbers", contacts);
-        editor.apply();
-    }
+//    static void setContacts(Activity activity){
+//        mainActivity = activity;
+//        Set<String> contacts = new HashSet<String>();
+//
+//        //Add the numbers to send the text message
+//        contacts.add("");
+//
+//        SharedPreferences sharedPref = activity.getPreferences(Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putStringSet("ContactNumbers", contacts);
+//        editor.apply();
+//    }
 
     /* textToSpeech
     * Εκφωνιση περιεχομενου μηνυματος

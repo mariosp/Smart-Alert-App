@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">UnipiSmartAlert</string>
     <string name="main_menu">Statistiques</string>
+    <string name="main_menu_contacts">Contacts</string>
     <string name="main_title1">Surveillance d automne</string>
     <string name="main_title2">Surveillance de l activité sismique</string>
     <string name="sos_title">Le statut SOS est activé</string>
