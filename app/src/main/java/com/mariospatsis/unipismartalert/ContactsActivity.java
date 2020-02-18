@@ -51,6 +51,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putStringSet("ContactNumbers", contacts);
                 editor.apply();
+                finish();
                 break;
         }
     }
