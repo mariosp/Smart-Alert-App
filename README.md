@@ -33,7 +33,7 @@ Sends a text message to close contacts when a fall of the user is detected. The 
     (You cannot build the app without the firebase SDK)
  4) Build and run the apk on real device
  
- You can preview the app by downloading an debug apk from here [smart-alert](https://drive.google.com/open?id=10zjtTQSylPVqjJr-1mUfOXbydgKij-oF)
+ You can preview the app by downloading a debug apk from here [smart-alert](https://drive.google.com/open?id=10zjtTQSylPVqjJr-1mUfOXbydgKij-oF)
  
 
 ## Development
