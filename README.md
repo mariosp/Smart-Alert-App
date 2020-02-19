@@ -28,8 +28,10 @@ Sends a text message to close contacts when a fall of the user is detected. The 
 
  1) Download or clone from github
  2) Open the project from android studio and wait until gradle finish
- 3) Setup your own [firebase](https://console.firebase.google.com/) project and import the exported json with configurations into the project as shown in the firebase new project tutorial. 
- 3) Build and run the apk on real device
+ 3) Setup your own [firebase](https://console.firebase.google.com/) project and import the exported json with configurations into the project as shown in the firebase new project tutorial.
+    You can also use the Firebase Assistant within Android studio to easily connect your project with firebase Tools> Firebase> Realtime Database > Connect to Firebase
+    (You cannot build the app without the firebase SDK)
+ 4) Build and run the apk on real device
  
  You can preview the app by downloading an debug apk from here [smart-alert](https://drive.google.com/open?id=10zjtTQSylPVqjJr-1mUfOXbydgKij-oF)
  
